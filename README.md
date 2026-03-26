@@ -4,6 +4,8 @@
 
 > 这不是一个可直接运行的产品（没有内置模型调用、没有 Web UI/服务端）；它提供的是 **流程规范、模板、schema 和校验工具**。
 
+安装说明见 [INSTALL.md](e:\workspace_new\requirement-assistant\INSTALL.md)。
+
 ---
 
 ## 功能介绍（What it does）
