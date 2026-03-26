@@ -84,6 +84,52 @@
 - PowerShell
 - Python 3（命令为 `python`）
 
+## 安装为 Codex Skill
+
+### 方式 1：直接从仓库使用
+
+在当前仓库根目录直接运行：
+
+```powershell
+.\ra.ps1 check-examples
+.\ra.ps1 run-evals
+```
+
+然后把材料交给助手，默认先产出 `issue-report`。
+
+### 方式 2：通过 npm / npx 安装
+
+发布到 npm 后，可直接安装到 Codex skills 目录：
+
+```powershell
+npx @chaidd/requirement-assistant-skill@latest install
+```
+
+默认安装到：
+
+```text
+%USERPROFILE%\.codex\skills\requirement-assistant
+```
+
+安装到当前项目：
+
+```powershell
+npx @chaidd/requirement-assistant-skill@latest install --target project
+```
+
+安装到指定目录：
+
+```powershell
+npx @chaidd/requirement-assistant-skill@latest install --dir C:\Users\you\.codex\skills
+```
+
+安装后建议验证：
+
+```powershell
+.\ra.ps1 check-examples
+.\ra.ps1 run-evals
+```
+
 ### 1) 校验仓库自带最小样例
 
 ```powershell
@@ -143,6 +189,8 @@ python scripts/run_evals.py --manifest evals/negative.json
 - `examples/`：最小合法 JSON 样例
 - `scripts/`：bootstrap/validate 脚本
 - `evals/`：最小 eval 基线（固定样例 + 期望检查）
+- `bin/install.js`：npm / npx 安装器入口
+- `package.json`：npm 分发元数据
 - `ra.ps1`：Windows 最小 CLI wrapper
 - `.planning/`：GSD 项目化文件与代码库地图（可选，用于项目推进/体检）
 
@@ -155,3 +203,10 @@ python scripts/run_evals.py --manifest evals/negative.json
 
 ### Q: 我如何把截图/纪要“变成” issue-report？
 把材料提供给对话式助手，让它按 `issue-report` schema 产出 JSON；然后用 `.\ra.ps1 validate issue-report <file>` 做本地校验。
+
+### Q: 发布 npm 前还需要做什么？
+至少需要：
+- 拥有 npm 账号，并对 `@chaidd` scope 有发布权限
+- 登录 npm：`npm login`
+- 确认包名未被占用：`npm view @chaidd/requirement-assistant-skill`
+- 发布：`npm publish --access public`

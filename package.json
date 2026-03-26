@@ -1,0 +1,35 @@
+{
+  "name": "@chaidd/requirement-assistant-skill",
+  "version": "0.1.0",
+  "description": "NPM installer for the requirement-assistant Codex skill",
+  "license": "UNLICENSED",
+  "private": false,
+  "bin": {
+    "requirement-assistant-skill": "./bin/install.js"
+  },
+  "files": [
+    "bin/",
+    "agents/",
+    "evals/",
+    "examples/",
+    "references/",
+    "schemas/",
+    "scripts/",
+    "ra.ps1",
+    "README.md",
+    "SKILL.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test:evals": "python scripts/run_evals.py"
+  },
+  "keywords": [
+    "codex",
+    "skill",
+    "requirements",
+    "structured-output",
+    "prd"
+  ]
+}
