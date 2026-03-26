@@ -1,7 +1,3 @@
-inputs/
-outputs/
-.planning/
-docs/
 scripts/__pycache__/
+**/__pycache__/
 *.pyc
-*.tgz

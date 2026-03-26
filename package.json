@@ -1,6 +1,6 @@
 {
   "name": "@chaidd/requirement-assistant-skill",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NPM installer for the requirement-assistant Codex skill",
   "license": "UNLICENSED",
   "private": false,
@@ -10,11 +10,14 @@
   "files": [
     "bin/",
     "agents/",
+    "docs/requirement-assistant/",
     "evals/",
     "examples/",
     "references/",
     "schemas/",
-    "scripts/",
+    "scripts/bootstrap_output.py",
+    "scripts/run_evals.py",
+    "scripts/validate_output.py",
     "ra.ps1",
     "README.md",
     "SKILL.md"

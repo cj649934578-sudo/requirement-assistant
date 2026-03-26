@@ -6,6 +6,22 @@ Use plan-first execution whenever the user provides screenshots, vague requests,
 
 Do not generate a full PRD immediately in these cases.
 
+`assistant-action` is the preferred entry command for this workflow.
+It should drive the internal phase order:
+- `intent -> plan -> ask -> confirm -> execute -> verify -> finalize`
+
+The assistant should report the current phase whenever the workflow pauses.
+The user does not need to manually invoke every phase command.
+
+When the workflow is paused:
+- return `run-status.md` style state
+- state the current phase, last completed phase, and next action
+- make it clear whether the run can continue immediately or is waiting on user confirmation
+
+When the user comes back later:
+- resume from the latest unfinished phase by default
+- restart from an earlier phase only if new inputs materially change scope, assumptions, or outputs
+
 ## Completion policy
 
 A task is complete only when:

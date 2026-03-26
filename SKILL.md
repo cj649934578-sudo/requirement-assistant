@@ -63,6 +63,7 @@ Prioritize:
 
 ### Modes At A Glance
 
+- `assistant-action`: generate `intent summary` and `execution plan` first, report current judgment and wait for user confirmation before any generation
 - `assistant-plan`: understand intent, produce an execution plan, stop before generation
 - `assistant-check`: scan for missing, conflict, ambiguous, and coverage-gap issues
 - `assistant-analyze`: decompose page, flow, rule, or state impact
@@ -72,6 +73,9 @@ Prioritize:
 - `assistant-generate`: execute only if blockers are already closed, otherwise route back to plan
 
 ### Gates
+
+The assistant must still follow the internal phase order of this skill.
+The user does not need to manually type every phase command, but the assistant must execute the workflow in sequence and report the current phase whenever the run is paused.
 
 Stop at planning if any of the following are true:
 - input is mainly screenshots or prototype images
@@ -105,9 +109,18 @@ Use these repo resources:
 - `schemas/*.schema.json` for exact JSON contracts
 - `scripts/bootstrap_output.py` and `scripts/validate_output.py` for runtime JSON workflow
 
+Workflow documents should be persisted under:
+- `docs/requirement-assistant/intent/YYYY-MM-DD-<topic>-intent-summary.md`
+- `docs/requirement-assistant/plan/YYYY-MM-DD-<topic>-execution-plan.md`
+- `docs/requirement-assistant/status/YYYY-MM-DD-<topic>-run-status.md`
+
+Use the same `topic` slug across the same workflow run when possible.
+`run-status.md` should usually be updated in place for that run instead of creating a new file on every pause.
+
 ### Command Shortcuts
 
 Explicit commands:
+- `/assistant-action`
 - `/assistant-plan`
 - `/assistant-check`
 - `/assistant-analyze`
@@ -117,6 +130,7 @@ Explicit commands:
 - `/assistant-generate`
 
 Natural language should map to the same modes even without slash commands.
+`assistant-action` is the recommended entry command when the user wants a guided plan-first run.
 
 ### Maintenance Rules
 
@@ -227,6 +241,17 @@ Declare execution complete only when:
 
 If any of the above is false, return a `run-status.md` style summary instead of saying the task is complete.
 
+## Pause and resume rules
+
+This skill is stateful at the workflow level.
+
+- when a run pauses, always report the current phase using `run-status.md` style fields
+- when practical, persist that status to `docs/requirement-assistant/status/YYYY-MM-DD-<topic>-run-status.md`
+- always state what has been completed, what is still blocked, and what the next action is
+- if the user comes back later, resume from the latest unfinished phase instead of restarting from intent by default
+- only restart from an earlier phase when new input materially changes scope, assumptions, or output requirements
+- `assistant-action` is the preferred entry for a fresh run, and also the preferred command for continuing from the previous workflow state
+
 ## Input handling rules
 
 Acceptable inputs:
@@ -246,6 +271,7 @@ Acceptable inputs:
 
 ## Mode contracts
 
+- `assistant-action`: return `intent summary`, `execution plan`, `blocking questions`, `recommendations`, `run status`, and wait for user confirmation
 - `assistant-plan`: return `intent summary`, `execution plan`, `blocking questions`, `recommendations`, `next action`
 - `assistant-check`: return scope checked, issue summary, concrete findings, revision suggestions
 - `assistant-analyze`: return object analyzed, key entities/relationships, risk points, downstream impact
