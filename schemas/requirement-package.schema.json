@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "requirement package",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "input_summary",
+    "recognition_summary",
+    "requirement_model",
+    "issues",
+    "pending_confirmations",
+    "generated_artifacts"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "input_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["materials", "language", "assumptions", "limitations"],
+      "properties": {
+        "materials": {"type": "array", "items": {"type": "string"}},
+        "language": {"type": "string", "minLength": 1},
+        "assumptions": {"type": "array", "items": {"type": "string"}},
+        "limitations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "recognition_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pages_identified",
+        "modules_identified",
+        "fields_identified",
+        "actions_identified",
+        "rules_identified",
+        "states_identified"
+      ],
+      "properties": {
+        "pages_identified": {"type": "integer"},
+        "modules_identified": {"type": "integer"},
+        "fields_identified": {"type": "integer"},
+        "actions_identified": {"type": "integer"},
+        "rules_identified": {"type": "integer"},
+        "states_identified": {"type": "integer"}
+      }
+    },
+    "requirement_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pages", "fields", "actions", "rules", "states", "exceptions", "test_points"],
+      "properties": {
+        "pages": {"type": "array", "items": {"$ref": "#/$defs/page"}},
+        "fields": {"type": "array", "items": {"$ref": "#/$defs/field"}},
+        "actions": {"type": "array", "items": {"$ref": "#/$defs/action"}},
+        "rules": {"type": "array", "items": {"$ref": "#/$defs/rule"}},
+        "states": {"type": "array", "items": {"$ref": "#/$defs/state"}},
+        "exceptions": {"type": "array", "items": {"$ref": "#/$defs/exception"}},
+        "test_points": {"type": "array", "items": {"$ref": "#/$defs/test_point"}}
+      }
+    },
+    "issues": {"type": "array", "items": {"$ref": "#/$defs/issue"}},
+    "pending_confirmations": {"type": "array", "items": {"$ref": "#/$defs/pending_confirmation"}},
+    "generated_artifacts": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "prd_markdown": {"type": "string"},
+        "function_list_markdown": {"type": "string"},
+        "test_points_markdown": {"type": "string"},
+        "draft_test_cases_markdown": {"type": "string"}
+      }
+    }
+  },
+  "$defs": {
+    "page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "goal"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "goal": {"type": "string", "minLength": 1},
+        "entry": {"type": "string"},
+        "modules": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "field": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "required"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "type": {"type": "string", "minLength": 1},
+        "required": {"type": "boolean"},
+        "validation": {"type": "string"},
+        "visibility": {"type": "string"},
+        "default": {"type": "string"}
+      }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "trigger"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "trigger": {"type": "string", "minLength": 1},
+        "preconditions": {"type": "array", "items": {"type": "string"}},
+        "success_result": {"type": "string"},
+        "failure_result": {"type": "string"}
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description"],
+      "properties": {
+        "description": {"type": "string", "minLength": 1},
+        "condition": {"type": "string"},
+        "effect": {"type": "string"}
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "enter_condition": {"type": "string"},
+        "exit_condition": {"type": "string"},
+        "available_actions": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "exception": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scenario"],
+      "properties": {
+        "scenario": {"type": "string", "minLength": 1},
+        "trigger": {"type": "string"},
+        "handling": {"type": "string"}
+      }
+    },
+    "test_point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["object", "normal_path"],
+      "properties": {
+        "object": {"type": "string", "minLength": 1},
+        "normal_path": {"type": "array", "items": {"type": "string"}},
+        "abnormal_path": {"type": "array", "items": {"type": "string"}},
+        "boundary_cases": {"type": "array", "items": {"type": "string"}},
+        "permission_cases": {"type": "array", "items": {"type": "string"}},
+        "state_cases": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "severity", "title", "description"],
+      "properties": {
+        "type": {"type": "string", "enum": ["missing", "conflict", "ambiguous", "coverage-gap"]},
+        "severity": {"type": "string", "enum": ["high", "medium", "low"]},
+        "title": {"type": "string", "minLength": 1},
+        "description": {"type": "string", "minLength": 1},
+        "evidence": {"type": "array", "items": {"type": "string"}},
+        "suggestion": {"type": "string"}
+      }
+    },
+    "pending_confirmation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["question", "why_it_matters"],
+      "properties": {
+        "question": {"type": "string", "minLength": 1},
+        "why_it_matters": {"type": "string", "minLength": 1},
+        "suggested_options": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

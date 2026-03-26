@@ -1,0 +1,80 @@
+{
+  "version": "2026-03-26",
+  "cases": [
+    {
+      "name": "issue-report-gdyd-202603",
+      "schema": "issue-report",
+      "output": "evals/fixtures/issue-report.gdyd-202603.json",
+      "checks": {
+        "equals": {
+          "$.summary.high": 4,
+          "$.summary.medium": 7,
+          "$.summary.low": 2
+        },
+        "min_lengths": {
+          "$.issues": 10,
+          "$.pending_confirmations": 3
+        },
+        "contains_any": {
+          "$.issues[*].type": [
+            "missing",
+            "ambiguous",
+            "coverage-gap"
+          ],
+          "$.issues[*].severity": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "contains_all_substrings": {
+          "$.scope.task": [
+            "issue-report",
+            "广东移动"
+          ]
+        }
+      }
+    },
+    {
+      "name": "prd-bundle-gdyd-202603",
+      "schema": "prd-bundle",
+      "output": "evals/fixtures/prd-bundle.gdyd-202603.json",
+      "checks": {
+        "equals": {
+          "$.artifact_type": "prd_bundle"
+        },
+        "min_lengths": {
+          "$.prd.goals": 3,
+          "$.draft_test_cases": 10
+        },
+        "contains_any": {
+          "$.draft_test_cases[*].priority": [
+            "P0",
+            "P1"
+          ]
+        },
+        "contains_all_substrings": {
+          "$.prd.title": [
+            "广东移动",
+            "用例草稿"
+          ]
+        }
+      }
+    },
+    {
+      "name": "requirement-package-minimal",
+      "schema": "requirement-package",
+      "output": "evals/fixtures/requirement-package.min.json",
+      "checks": {
+        "equals": {
+          "$.schema_version": "1.0.0"
+        },
+        "min_lengths": {
+          "$.input_summary.materials": 0,
+          "$.issues": 0,
+          "$.pending_confirmations": 0
+        }
+      }
+    }
+  ]
+}

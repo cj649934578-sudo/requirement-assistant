@@ -1,0 +1,5 @@
+.planning/
+inputs/
+outputs/
+__pycache__/
+*.pyc

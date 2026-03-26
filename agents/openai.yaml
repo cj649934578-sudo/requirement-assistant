@@ -1,0 +1,4 @@
+interface:
+  display_name: "Requirement Analysis Assistant"
+  short_description: "Turn prototypes and notes into checked requirement artifacts"
+  category: "productivity"

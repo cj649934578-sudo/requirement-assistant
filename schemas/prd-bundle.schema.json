@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "prd bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifact_type", "prd", "function_list", "test_points", "draft_test_cases"],
+  "properties": {
+    "schema_version": {"type": "string", "minLength": 1},
+    "artifact_type": {"type": "string", "enum": ["prd_bundle"]},
+    "prd": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title", "background", "goals", "users_and_roles", "scope", "pages_or_flows", "core_interactions", "business_rules", "exceptions_and_edge_cases", "pending_confirmations"
+      ],
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "background": {"type": "string"},
+        "goals": {"type": "array", "items": {"type": "string"}},
+        "users_and_roles": {"type": "array", "items": {"type": "string"}},
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["in_scope", "out_of_scope"],
+          "properties": {
+            "in_scope": {"type": "array", "items": {"type": "string"}},
+            "out_of_scope": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "pages_or_flows": {"type": "array", "items": {"type": "string"}},
+        "core_interactions": {"type": "array", "items": {"type": "string"}},
+        "business_rules": {"type": "array", "items": {"type": "string"}},
+        "exceptions_and_edge_cases": {"type": "array", "items": {"type": "string"}},
+        "pending_confirmations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "function_list": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["module", "function_point", "trigger", "precondition", "result"],
+        "properties": {
+          "module": {"type": "string", "minLength": 1},
+          "function_point": {"type": "string", "minLength": 1},
+          "trigger": {"type": "string", "minLength": 1},
+          "precondition": {"type": "string", "minLength": 1},
+          "result": {"type": "string", "minLength": 1},
+          "exception_or_note": {"type": "string"}
+        }
+      }
+    },
+    "test_points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["object", "normal_path", "abnormal_path", "boundary_cases", "permission_cases", "state_or_transition_cases"],
+        "properties": {
+          "object": {"type": "string", "minLength": 1},
+          "normal_path": {"type": "array", "items": {"type": "string"}},
+          "abnormal_path": {"type": "array", "items": {"type": "string"}},
+          "boundary_cases": {"type": "array", "items": {"type": "string"}},
+          "permission_cases": {"type": "array", "items": {"type": "string"}},
+          "state_or_transition_cases": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "draft_test_cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_title", "preconditions", "steps", "expected_result", "priority"],
+        "properties": {
+          "case_title": {"type": "string", "minLength": 1},
+          "preconditions": {"type": "array", "items": {"type": "string"}},
+          "steps": {"type": "array", "items": {"type": "string"}},
+          "expected_result": {"type": "string", "minLength": 1},
+          "priority": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]}
+        }
+      }
+    }
+  }
+}

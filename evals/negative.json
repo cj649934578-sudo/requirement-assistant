@@ -1,0 +1,34 @@
+{
+  "version": "2026-03-26",
+  "cases": [
+    {
+      "name": "issue-report-schema-invalid",
+      "schema": "issue-report",
+      "output": "evals/fixtures/issue-report.schema-invalid.json",
+      "checks": {
+        "equals": {
+          "$.schema_version": "1.0.0"
+        }
+      }
+    },
+    {
+      "name": "issue-report-semantic-regression",
+      "schema": "issue-report",
+      "output": "evals/fixtures/issue-report.semantic-regression.json",
+      "checks": {
+        "equals": {
+          "$.summary.high": 4
+        },
+        "min_lengths": {
+          "$.issues": 10,
+          "$.pending_confirmations": 3
+        },
+        "contains_any": {
+          "$.issues[*].severity": [
+            "high"
+          ]
+        }
+      }
+    }
+  ]
+}
