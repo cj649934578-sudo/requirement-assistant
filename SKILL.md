@@ -1,7 +1,7 @@
 ---
 name: requirement-assistant
 version: 0.2.1
-description: "analyze product requirement materials and turn them into structured requirement artifacts for gpt or codex. use when the user provides prototype images, page screenshots, page notes, flow descriptions, prd fragments, meeting notes, or mixed requirement materials and wants a staged requirement workflow: first understand intent, then produce an execution plan, ask blocking questions, confirm scope and assumptions, and only then execute generation of prd drafts, function lists, test points, issue reports, or structured json outputs. also use for requirement checking, analysis, clarification, confirmation, and plan-first execution."
+description: "analyze product requirement materials and turn them into structured requirement artifacts for gpt or codex. use when the user provides prototype images, page screenshots, page notes, flow descriptions, prd fragments, meeting notes, or mixed requirement materials and wants a staged requirement workflow: first understand intent, then produce an execution plan, classify items requiring confirmation by severity, confirm scope and assumptions, and only then execute generation of prd drafts, function lists, test points, issue reports, or structured json outputs. also use for requirement checking, analysis, clarification, confirmation, and plan-first execution."
 ---
 
 # Requirement Assistant
@@ -27,7 +27,7 @@ Working rule:
 1. understand the goal
 2. produce a fixed plan
 3. check for missing, conflict, ambiguous, and coverage-gap issues
-4. ask only blocking questions
+4. classify items requiring confirmation by severity and ask only the ones that materially affect the next step
 5. wait for confirmation or explicit assumptions approval
 6. execute in bounded steps
 7. verify before completion
@@ -86,7 +86,7 @@ Stop at planning if any of the following are true:
 - the request could mean several deliverables
 
 Execute only when at least one is true:
-- the user answered the blocking questions
+- the user answered the must-confirm items
 - the user approved the execution plan
 - the user explicitly allowed proceeding with listed assumptions
 
@@ -154,7 +154,7 @@ Adopt a superpowers-style execution pattern:
 1. understand the user's real goal
 2. produce a fixed execution plan
 3. check for missing, conflict, ambiguous, and coverage-gap issues
-4. ask only blocking questions
+4. classify items requiring confirmation by severity and ask only the ones that materially affect the next step
 5. wait for confirmation or explicit permission to proceed with assumptions
 6. execute in bounded steps
 7. verify outputs before declaring completion
@@ -185,7 +185,7 @@ Always include:
 - input inventory
 - recognized content
 - planned steps
-- blocking questions
+- items requiring confirmation
 - recommendations
 - next action
 
@@ -206,18 +206,18 @@ Route the workflow to `ask` or `confirm` first.
 ### Phase 4: ask
 Ask only the questions that materially change scope, structure, or correctness.
 
-Good blocking questions include:
+Good must-confirm questions include:
 - is this page-only optimization or does it include business logic changes?
 - should the output follow a formal company prd template or a compact analysis draft?
 - should test points and acceptance criteria be included now?
 - which assumptions are safe to proceed with if no answer is available?
 
-Do not ask more than 3 to 5 blocking questions in one turn.
+Do not ask more than 3 to 5 must-confirm questions in one turn.
 Always pair questions with practical recommendations.
 
 ### Phase 5: confirm
 The task becomes executable only when one of the following is true:
-- the user answered the blocking questions
+- the user answered the must-confirm items
 - the user explicitly approved the execution plan
 - the user explicitly allowed proceeding with listed assumptions
 
@@ -242,7 +242,7 @@ Execution should be bounded and minimal:
 ### Phase 7: verify
 Before declaring completion, verify:
 - requested outputs were produced
-- blocking questions count is zero
+- must-confirm items count is zero
 - assumptions are listed
 - issue taxonomy is respected
 - json outputs pass schema validation when strict mode is requested
@@ -251,7 +251,7 @@ Before declaring completion, verify:
 Declare execution complete only when:
 - goal is defined
 - plan exists
-- blocking questions are closed or explicitly waived
+- must-confirm items are closed or explicitly waived
 - required outputs are generated
 - validation is complete
 - the user has signed off or explicitly allowed auto-finalization
@@ -289,8 +289,8 @@ Acceptable inputs:
 
 ## Mode contracts
 
-- `assistant-action`: return `intent summary`, `execution plan`, `blocking questions`, `recommendations`, `run status`, and wait for user confirmation
-- `assistant-plan`: return `intent summary`, `execution plan`, `blocking questions`, `recommendations`, `next action`
+- `assistant-action`: return `intent summary`, `execution plan`, `items requiring confirmation`, `recommendations`, `run status`, and wait for user confirmation
+- `assistant-plan`: return `intent summary`, `execution plan`, `items requiring confirmation`, `recommendations`, `next action`
 - `assistant-check`: return scope checked, issue summary, concrete findings, revision suggestions
 - `assistant-analyze`: return object analyzed, key entities/relationships, risk points, downstream impact
 - `assistant-ask`: return questions with why each matters and suggested options when possible

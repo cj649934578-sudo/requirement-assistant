@@ -1,81 +1,81 @@
-# Strict JSON Output and Validation
+# 严格 JSON 输出与校验
 
-Use this reference when the user wants machine-readable output for GPT, Codex, downstream APIs, or automated pipelines.
+当用户需要面向 GPT、Codex、下游 API 或自动化流水线的机器可读输出时，使用本说明。
 
-## Supported schemas
+## 支持的 schema
 
 ### 1. requirement-package
-Use for full-pass outputs that include recognition, requirement modeling, issue discovery, confirmations, and optional generated artifacts.
+适用于完整分析输出，包含识别结果、需求建模、问题发现、待确认项以及可选生成产物。
 
-Schema file:
+Schema 文件：
 - `schemas/requirement-package.schema.json`
 
-Bootstrap command:
+生成骨架命令：
 ```bash
 scripts/bootstrap_output.py requirement-package /tmp/requirement-package.json
 ```
 
-Validate command:
+校验命令：
 ```bash
 scripts/validate_output.py requirement-package /tmp/requirement-package.json
 ```
 
 ### 2. issue-report
-Use for review-focused outputs when the user asks mainly for checking, scanning, or risk identification.
+适用于检查、扫描、风险识别类输出。
 
-Schema file:
+Schema 文件：
 - `schemas/issue-report.schema.json`
 
-Bootstrap command:
+生成骨架命令：
 ```bash
 scripts/bootstrap_output.py issue-report /tmp/issue-report.json
 ```
 
-Validate command:
+校验命令：
 ```bash
 scripts/validate_output.py issue-report /tmp/issue-report.json
 ```
 
 ### 3. prd-bundle
-Use when the user wants generated requirement deliverables in machine-readable form.
+适用于用户需要机器可读的需求交付物生成结果时。
 
-Schema file:
+Schema 文件：
 - `schemas/prd-bundle.schema.json`
 
-Bootstrap command:
+生成骨架命令：
 ```bash
 scripts/bootstrap_output.py prd-bundle /tmp/prd-bundle.json
 ```
 
-Validate command:
+校验命令：
 ```bash
 scripts/validate_output.py prd-bundle /tmp/prd-bundle.json
 ```
 
-## Schema selection rules
+## Schema 选择规则
 
-- Choose `requirement-package` for full analysis or mixed requests.
-- Choose `issue-report` for check / review / scan requests.
-- Choose `prd-bundle` for generate / draft requests.
-- If the user explicitly asks for JSON schema output, prefer one of these schemas over free-form markdown.
+- 完整分析或混合型请求，优先选 `requirement-package`。
+- 检查 / 评审 / 扫描类请求，优先选 `issue-report`。
+- 生成 / 草稿类请求，优先选 `prd-bundle`。
+- 如果用户明确要求 JSON schema 输出，优先使用这些 schema，而不是自由 markdown。
 
-## Output discipline
+## 输出约束
 
-When producing strict JSON:
-- Do not add commentary inside the JSON object.
-- Keep keys exactly as defined in the schema.
-- Use empty arrays instead of omitting optional list fields when feasible.
-- Put uncertain content into `assumptions`, `limitations`, or `pending_confirmations` instead of fabricating facts.
-- Validate with `scripts/validate_output.py` whenever you are working in a filesystem context.
+输出严格 JSON 时：
+- 不要在 JSON 对象内部混入解释性文字。
+- key 必须严格与 schema 定义一致。
+- 可行时优先使用空数组，而不是省略可选列表字段。
+- 不确定内容应放入 `assumptions`、`limitations` 或 `pending_confirmations`，不要编造事实。
+- 在有文件系统上下文时，应使用 `scripts/validate_output.py` 做校验。
 
-## Minimal valid example files
-Use these files when GPT or Codex needs the smallest legal payload for each schema, or when testing the bundled validator:
+## 最小合法示例文件
+当 GPT 或 Codex 需要每个 schema 的最小合法载荷，或需要测试内置校验器时，使用以下文件：
 
 - `examples/requirement-package.min.json`
 - `examples/issue-report.min.json`
 - `examples/prd-bundle.min.json`
 
-Recommended check commands:
+推荐校验命令：
 
 ```bash
 python scripts/validate_output.py requirement-package examples/requirement-package.min.json

@@ -1,10 +1,10 @@
-# JSON Examples
+# JSON 示例
 
-Use this file when the user requests strict JSON output, machine-readable output, or codex-ready payloads.
+当用户要求严格 JSON 输出、机器可读输出或可直接给 Codex 使用的载荷时，使用本文件。
 
-## Example 1: Full requirement package
+## 示例 1：完整 requirement-package
 
-### Example input
+### 输入示例
 - Two prototype screenshots for an order submit page and an order result page
 - Page notes:
   - user can enter receiver name, phone number, and address
@@ -14,10 +14,10 @@ Use this file when the user requests strict JSON output, machine-readable output
   - after successful submission, user goes to result page
   - after approval, the order becomes read-only
 
-### Recommended schema
+### 推荐 schema
 `requirement-package`
 
-### Example output
+### 输出示例
 ```json
 {
   "schema": "requirement-package",
@@ -135,17 +135,17 @@ Use this file when the user requests strict JSON output, machine-readable output
 }
 ```
 
-## Example 2: Issue report for requirement checking
+## 示例 2：用于需求检查的 issue-report
 
-### Example input
+### 输入示例
 - Existing PRD fragment says the coupon field is optional
 - Submission rule says the coupon field must be filled before submission
 - No description for invalid coupon handling
 
-### Recommended schema
+### 推荐 schema
 `issue-report`
 
-### Example output
+### 输出示例
 ```json
 {
   "schema": "issue-report",
@@ -182,17 +182,17 @@ Use this file when the user requests strict JSON output, machine-readable output
 }
 ```
 
-## Example 3: PRD bundle output
+## 示例 3：PRD bundle 输出
 
-### Example input
+### 输入示例
 - Requirement note for a refund request page
 - User can select reason, upload up to 3 images, submit refund request, and view result
 - Testing needs a structured PRD plus test points only
 
-### Recommended schema
+### 推荐 schema
 `prd-bundle`
 
-### Example output
+### 输出示例
 ```json
 {
   "schema_version": "1.0.0",
@@ -252,13 +252,13 @@ Use this file when the user requests strict JSON output, machine-readable output
 }
 ```
 
-## Usage notes
-- Prefer these examples when schema selection is clear but the user did not provide an exact output skeleton.
-- Keep enum values and required top-level keys consistent with the actual JSON schema files.
-- If a field is unknown, do not invent it. Use the schema's pending confirmation or limitation fields instead.
+## 使用说明
+- 当 schema 选择已经明确，但用户没有给出精确输出骨架时，优先参考这些示例。
+- 枚举值和顶层必填 key 必须与实际 JSON schema 文件保持一致。
+- 如果某个字段未知，不要编造，改用 schema 中的 pending confirmation 或 limitation 类字段承载。
 
-## Minimal valid payloads
-For bare-minimum schema-compliant outputs, inspect the example files bundled in `examples/`. They are intentionally sparse and useful for bootstrapping or automated tests:
+## 最小合法载荷
+如果需要最小化且符合 schema 的输出，请查看 `examples/` 中附带的示例文件。它们刻意保持精简，适合用于初始化或自动化测试：
 
 - `examples/requirement-package.min.json`
 - `examples/issue-report.min.json`

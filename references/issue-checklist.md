@@ -1,38 +1,38 @@
-# Issue Discovery Checklist
+# 问题发现清单
 
-Use this checklist during the automatic review phase.
+在自动检查阶段使用这份清单。
 
-## Completeness
-- Is every critical page or flow represented?
-- Does every major action have success and failure feedback?
-- Do inputs define required/optional status?
-- Do fields define validation rules?
-- Are empty states, loading states, and failure states covered where relevant?
-- Are role or permission differences defined where relevant?
+## 完整性
+- 是否覆盖了每个关键页面或流程？
+- 每个主要动作是否都定义了成功和失败反馈？
+- 输入项是否明确了必填/非必填状态？
+- 字段是否定义了校验规则？
+- 空状态、加载状态和失败状态在需要时是否都有覆盖？
+- 角色或权限差异在需要时是否有定义？
 
-## Consistency
-- Do screenshots, notes, and flow descriptions agree?
-- Do field rules align with submission rules?
-- Do state definitions align with allowed actions?
-- Do page descriptions align with scope statements?
+## 一致性
+- 截图、说明笔记和流程描述是否一致？
+- 字段规则是否与提交流程规则一致？
+- 状态定义是否与允许执行的动作一致？
+- 页面描述是否与范围说明一致？
 
-## Ambiguity
-- Are there fuzzy terms without conditions or audiences?
-- Are the actor, object, and trigger all clear?
-- Are time constraints specific?
-- Are visibility rules explicit?
+## 歧义性
+- 是否存在没有适用条件或适用对象的模糊表述？
+- 执行主体、对象和触发条件是否都清晰？
+- 时间限制是否足够具体？
+- 可见性规则是否明确？
 
-## Testability
-- Can testers derive normal flow tests?
-- Can testers derive abnormal flow tests?
-- Are boundary conditions present?
-- Are state transitions testable?
-- Are permission combinations testable?
+## 可测试性
+- 测试人员能否据此拆出正常流程测试？
+- 测试人员能否据此拆出异常流程测试？
+- 是否包含边界条件？
+- 状态流转是否可测试？
+- 权限组合是否可测试？
 
-## Confirmation prompts
-When important information is missing, prefer questions like:
-- who can perform this action?
-- under what condition is this field required?
-- what should happen when submission fails?
-- what is the expected behavior for empty or invalid input?
-- what states can transition into and out of this state?
+## 确认问题提示
+当关键信息缺失时，优先提出这类问题：
+- 谁可以执行这个动作？
+- 在什么条件下这个字段是必填的？
+- 提交失败时应该发生什么？
+- 空输入或非法输入时的预期行为是什么？
+- 哪些状态可以进入或退出当前状态？

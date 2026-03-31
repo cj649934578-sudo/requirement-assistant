@@ -1,146 +1,168 @@
-# Output Templates
+# 输出模板
 
-Use these templates when the user asks for formal outputs or when consistency matters.
+当用户要求正式输出，或需要统一结构与风格时，使用以下模板。
 
-## 1. Recognition summary
+## 1. 识别摘要
 
 ```markdown
-## Recognition summary
-- Pages identified:
-- Modules identified:
-- Fields identified:
-- Actions identified:
-- Rules identified:
-- States identified:
-- Key assumptions:
+## 识别摘要
+- 已识别页面:
+- 已识别模块:
+- 已识别字段:
+- 已识别动作:
+- 已识别规则:
+- 已识别状态:
+- 关键假设:
 ```
 
-## 2. Structured requirement model
+## 2. 结构化需求模型
 
 ```markdown
-## Structured requirement model
-### Pages
-- Page name:
-  - Goal:
-  - Entry:
-  - Key modules:
+## 结构化需求模型
+### 页面
+- 页面名称:
+  - 目标:
+  - 入口:
+  - 关键模块:
 
-### Fields
-- Field name:
-  - Type:
-  - Required:
-  - Validation:
-  - Visibility:
-  - Default:
+### 字段
+- 字段名称:
+  - 类型:
+  - 是否必填:
+  - 校验规则:
+  - 可见性:
+  - 默认值:
 
-### Actions
-- Action name:
-  - Trigger:
-  - Preconditions:
-  - Success result:
-  - Failure result:
+### 动作
+- 动作名称:
+  - 触发方式:
+  - 前置条件:
+  - 成功结果:
+  - 失败结果:
 
-### Rules
-- Rule:
-  - Condition:
-  - Effect:
+### 规则
+- 规则:
+  - 条件:
+  - 影响:
 
-### States
-- State:
-  - Enter condition:
-  - Exit condition:
-  - Available actions:
+### 状态
+- 状态:
+  - 进入条件:
+  - 退出条件:
+  - 可执行动作:
 ```
 
-## 3. Issue list
+## 3. 问题清单
 
 ```markdown
-## Issue list
-### High priority
-- [type] title
-  - Why it matters:
-  - Evidence:
-  - Suggestion:
+## 问题清单
+### 高优先级
+- [类型] 标题
+  - 影响原因:
+  - 依据:
+  - 建议:
 
-### Medium priority
+### 中优先级
 ...
 
-### Low priority
+### 低优先级
 ...
 ```
 
-## 4. Pending confirmations
+## 4. 待确认项
 
 ```markdown
-## Pending confirmations
-1. Question:
-   - Why this must be confirmed:
-   - Suggested options:
+## 待确认项
+### 必须确认项
+1. 问题:
+   - 必须确认原因:
+   - 建议选项:
+     - 选项 A
+     - 选项 B
+
+### 建议优化项
+1. 问题:
+   - 建议先确认原因:
+   - 建议选项:
+     - 选项 A
+     - 选项 B
+
+### 可后续确认项
+1. 问题:
+   - 可延后确认原因:
+   - 建议选项:
+     - 选项 A
+     - 选项 B
 ```
 
-## 5. PRD draft
+## 5. PRD 草稿
 
 ```markdown
-# PRD draft
+# PRD 草稿
 
-## Background and goal
+## 背景与目标
 
-## Users and roles
+## 用户与角色
 
-## Scope
+## 范围
 
-## Pages / flow description
+## 页面/流程说明
 
-## Core interactions
+## 核心交互
 
-## Business rules
+## 业务规则
 
-## Exceptions and edge cases
+## 异常与边界场景
 
-## Pending confirmations
+## 待确认项
 ```
 
-## 6. Function list
+## 6. 功能清单
 
 ```markdown
-## Function list
-| Module | Function point | Trigger | Precondition | Result | Exception/Note |
+## 功能清单
+| 模块 | 功能点 | 触发方式 | 前置条件 | 结果 | 异常/备注 |
 |---|---|---|---|---|---|
 ```
 
-## 7. Test points
+## 7. 测试点
 
 ```markdown
-## Test points
-### Object
-- Normal path:
-- Abnormal path:
-- Boundary cases:
-- Permission cases:
-- State/transition cases:
+## 测试点
+### 对象
+- 正常路径:
+- 异常路径:
+- 边界场景:
+- 权限场景:
+- 状态/流转场景:
 ```
 
-## 8. Draft test cases
+## 8. 测试用例草稿
 
 ```markdown
-## Draft test cases
-### Case 1: [功能模块]-[测试场景标题]
-- Preconditions:
-- Steps:
+## 测试用例草稿
+### 用例 1: [功能模块]-[测试场景标题]
+- 前置条件:
+- 步骤:
   1. [尽量详细描述用户操作、输入值、前置状态和触发动作]
   2. [继续补充关键步骤，不要只写“执行功能”]
-- Expected result:
-- Priority:
+- 预期结果:
+- 优先级:
 ```
 
-Rules:
-- The test case title should use the functional module as a prefix.
-- Example title: `登录模块-手机号登录成功`
-- Steps should be as detailed as practical so a tester can execute them directly.
-- Preconditions should clearly state account state, permissions, data setup, and page entry conditions when relevant.
-- Expected result should describe user-visible result, state change, and error feedback when applicable.
+规则：
+- 测试用例标题应以功能模块作为前缀。
+- 示例标题：`登录模块-手机号登录成功`
+- 步骤应尽量详细，能够让测试人员直接执行。
+- 前置条件应在适用时明确账号状态、权限、测试数据和页面进入条件。
+- 预期结果应描述用户可见结果、状态变化以及错误反馈。
 
 
-## Plan-first note
+## Plan-first 说明
 
-For image-first or underspecified tasks, prefer producing `intent-summary.md`, `execution-plan.md`, and `run-status.md` before a full PRD.
+对于以截图为主或信息不足的任务，优先先产出 `intent-summary.md`、`execution-plan.md` 和 `run-status.md`，不要直接进入完整 PRD。
+
+待确认项格式规则：
+- 不要把“一个问题 + 它的选项”压平成连续的单层编号列表。
+- 只对问题本身编号。
+- 选项必须作为对应问题下的缩进无序列表展示。

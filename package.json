@@ -1,6 +1,6 @@
 {
   "name": "@chaidd/requirement-assistant-skill",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "NPM installer for the requirement-assistant Codex skill",
   "license": "UNLICENSED",
   "private": false,
