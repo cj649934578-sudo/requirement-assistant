@@ -8,7 +8,10 @@ Do not generate a full PRD immediately in these cases.
 
 `assistant-action` is the preferred entry command for this workflow.
 It should drive the internal phase order:
-- `intent -> plan -> ask -> confirm -> execute -> verify -> finalize`
+- `intent -> plan -> check -> ask -> confirm -> execute -> verify -> finalize`
+
+This is the default path.
+Do not skip `check`, `ask`, or `confirm` unless the user explicitly requests a skip.
 
 The assistant should report the current phase whenever the workflow pauses.
 The user does not need to manually invoke every phase command.
@@ -21,6 +24,7 @@ When the workflow is paused:
 When the user comes back later:
 - resume from the latest unfinished phase by default
 - restart from an earlier phase only if new inputs materially change scope, assumptions, or outputs
+- if the user raises a new question, correction, or newly discovered constraint, move back to the earliest affected phase before continuing
 
 ## Completion policy
 

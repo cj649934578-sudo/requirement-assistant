@@ -4,6 +4,8 @@ Use these fixed templates for plan-first execution.
 
 `assistant-action` is the recommended workflow entry.
 It should first produce `intent-summary.md` and `execution-plan.md`, then report `run-status.md` style state and wait for user confirmation when the run cannot safely continue.
+Default internal phase order:
+- `intent -> plan -> check -> ask -> confirm -> execute -> verify -> finalize`
 
 Recommended file locations:
 - `docs/requirement-assistant/intent/YYYY-MM-DD-<topic>-intent-summary.md`
@@ -67,6 +69,7 @@ Recommended file locations:
 - suitable for direct execution: [yes / no]
 - recommended mode: [plan / analyze / check / ask / confirm / execute]
 - current workflow phase: [plan]
+- skipped phases: [none / user-requested phase names]
 
 ## Input inventory
 - screenshots:
@@ -101,7 +104,7 @@ Recommended file locations:
 - 
 
 ## Next action
-[wait for confirmation / ask blocking questions / proceed with assumptions / continue to next phase]
+[continue to check / ask blocking questions / wait for confirmation / proceed with user-approved assumptions]
 ```
 
 ## run-status.md
@@ -115,10 +118,10 @@ Recommended file locations:
 - status-file: [this file path]
 
 ## Current phase
-[intent / plan / ask / confirm / execute / verify / finalize]
+[intent / plan / check / ask / confirm / execute / verify / finalize]
 
 ## Last completed phase
-[intent / plan / ask / confirm / execute / verify / none]
+[intent / plan / check / ask / confirm / execute / verify / none]
 
 ## Goal status
 [defined / unclear]
@@ -137,6 +140,9 @@ Recommended file locations:
 
 ## Resume from
 [phase name]
+
+## Rollback trigger
+[none / new question / new correction / new scope input / new dependency]
 
 ## Can finalize
 [yes / no]

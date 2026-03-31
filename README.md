@@ -4,7 +4,7 @@
 
 > 这不是一个可直接运行的产品（没有内置模型调用、没有 Web UI/服务端）；它提供的是 **流程规范、模板、schema 和校验工具**。
 
-安装说明见 [INSTALL.md](e:\workspace_new\requirement-assistant\INSTALL.md)。
+安装说明见 [INSTALL.md](INSTALL.md)。
 
 ---
 
@@ -195,13 +195,14 @@ python scripts/run_evals.py --manifest evals/negative.json
 
 正确理解方式：
 
-- 助手内部应遵守顺序化流程：`intent -> plan -> ask -> confirm -> execute -> verify -> finalize`
+- 助手内部应遵守顺序化流程：`intent -> plan -> check -> ask -> confirm -> execute -> verify -> finalize`
 - 正常使用时，你可以直接用自然语言描述目标，由助手驱动内部流程，而不是要求用户手动逐条输入命令
 - 如果你希望使用一个统一入口命令，推荐使用 `assistant-action`
-- 当信息不足时，助手应优先停在 `assistant-plan`、`assistant-ask` 或 `assistant-confirm`，而不是直接生成长文或 JSON
-- 当范围、假设、输出物已经足够明确时，助手可以直接进入 `assistant-check`、`assistant-analyze`，或在确认条件满足后进入 `assistant-execute`
+- 默认情况下，助手应按顺序执行，不应主动跳过 `check`、`ask` 或 `confirm`
+- 只有用户明确要求跳过某一步时，助手才可以跳过对应阶段
 - 每次暂停时，助手都应明确告知当前执行到了哪一步、已完成什么、还缺什么、下一步建议是什么
 - 后续继续时，助手应默认从上一次未完成的阶段继续，而不是重新从头分析
+- 如果用户提出新的问题、纠正、补充约束或新材料，助手应回退到受影响的最早阶段，再继续往后执行
 
 ### 推荐用法
 
@@ -253,11 +254,28 @@ python scripts/run_evals.py --manifest evals/negative.json
 - `assistant-confirm`：锁定范围、假设、输出物
 - `assistant-execute`：在确认后生成交付物
 
+### 测试用例输出规范
+
+如果输出包含测试用例，推荐至少包含以下字段：
+
+- 测试用例标题
+- 前置条件
+- 测试用例步骤
+- 测试用例期望结果
+
+约束建议：
+
+- 测试用例标题应以功能模块作为前缀，例如：`登录模块-手机号登录成功`
+- 测试用例步骤应尽量详细，能够直接指导测试执行，而不是只写笼统动作
+- 前置条件应尽量说明账号状态、权限、测试数据和页面进入条件
+- 期望结果应尽量覆盖页面反馈、状态变化、校验结果和错误提示
+
 这些阶段的关系应理解为：
 
 - 它们构成一个内部顺序工作流
 - 不要求用户必须手动依次调用每个阶段命令
 - 助手需要明确当前处于哪一阶段，并在暂停后支持继续执行
+- 默认路径应按顺序执行，除非用户明确提出跳过某一步
 - 其中 `assistant-action` 更适合作为默认起点
 
 ### 常见使用场景
@@ -315,7 +333,7 @@ assistant-action，帮我根据这些截图整理需求
 
 ### 一句话原则
 
-**助手内部应按 plan-first 流程一步一步执行，并持续汇报当前阶段状态；用户不需要手动输入每个阶段命令，通常用 `assistant-action` 作为入口即可。**
+**助手内部应按 `intent -> plan -> check -> ask -> confirm -> execute -> verify -> finalize` 顺序执行，并持续汇报当前阶段状态；只有用户明确要求时才可跳过某一步。**
 
 ---
 

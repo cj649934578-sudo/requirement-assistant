@@ -73,10 +73,26 @@
         "additionalProperties": false,
         "required": ["case_title", "preconditions", "steps", "expected_result", "priority"],
         "properties": {
-          "case_title": {"type": "string", "minLength": 1},
-          "preconditions": {"type": "array", "items": {"type": "string"}},
-          "steps": {"type": "array", "items": {"type": "string"}},
-          "expected_result": {"type": "string", "minLength": 1},
+          "case_title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Test case title. Should use the functional module as a prefix, for example: 登录模块-手机号登录成功."
+          },
+          "preconditions": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Preconditions required before execution, such as account state, permissions, test data, and page entry conditions."
+          },
+          "steps": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Detailed execution steps. Each step should be specific enough for direct manual execution, including user actions, inputs, and trigger conditions where relevant."
+          },
+          "expected_result": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Expected result after executing the steps, including visible feedback, state changes, and validation or error behavior when applicable."
+          },
           "priority": {"type": "string", "enum": ["P0", "P1", "P2", "P3"]}
         }
       }

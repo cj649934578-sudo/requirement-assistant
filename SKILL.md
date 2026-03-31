@@ -26,10 +26,11 @@ Default inputs remain flexible:
 Working rule:
 1. understand the goal
 2. produce a fixed plan
-3. ask only blocking questions
-4. wait for confirmation or explicit assumptions approval
-5. execute in bounded steps
-6. verify before completion
+3. check for missing, conflict, ambiguous, and coverage-gap issues
+4. ask only blocking questions
+5. wait for confirmation or explicit assumptions approval
+6. execute in bounded steps
+7. verify before completion
 
 ### Role Views
 
@@ -152,16 +153,17 @@ Use this skill as a **plan-first requirement workflow**, not as a direct long-do
 Adopt a superpowers-style execution pattern:
 1. understand the user's real goal
 2. produce a fixed execution plan
-3. ask only blocking questions
-4. wait for confirmation or explicit permission to proceed with assumptions
-5. execute in bounded steps
-6. verify outputs before declaring completion
+3. check for missing, conflict, ambiguous, and coverage-gap issues
+4. ask only blocking questions
+5. wait for confirmation or explicit permission to proceed with assumptions
+6. execute in bounded steps
+7. verify outputs before declaring completion
 
 Do not jump straight from screenshots to a full PRD unless the user explicitly asks for fast draft mode and accepts the risk.
 
 ## Core workflow
 
-Follow this state machine unless the user explicitly narrows the task to a single phase.
+Follow this state machine unless the user explicitly narrows the task to a single phase or explicitly asks to skip a stage.
 
 ### Phase 1: intent
 Determine what the user actually wants.
@@ -189,7 +191,19 @@ Always include:
 
 If the task is image-first, vague, or underspecified, stop here and ask for confirmation before generating long outputs.
 
-### Phase 3: ask
+### Phase 3: check
+Perform a requirement quality pass before asking for confirmation or generating deliverables.
+
+Check for:
+- missing required rules or states
+- conflict across screenshots, notes, and PRD fragments
+- ambiguous language that changes implementation or test behavior
+- coverage gaps that would weaken test points or draft test cases
+
+If any finding materially affects downstream execution, do not continue to execute.
+Route the workflow to `ask` or `confirm` first.
+
+### Phase 4: ask
 Ask only the questions that materially change scope, structure, or correctness.
 
 Good blocking questions include:
@@ -201,7 +215,7 @@ Good blocking questions include:
 Do not ask more than 3 to 5 blocking questions in one turn.
 Always pair questions with practical recommendations.
 
-### Phase 4: confirm
+### Phase 5: confirm
 The task becomes executable only when one of the following is true:
 - the user answered the blocking questions
 - the user explicitly approved the execution plan
@@ -213,7 +227,7 @@ When confirming, restate:
 - accepted assumptions
 - remaining non-blocking uncertainties
 
-### Phase 5: execute
+### Phase 6: execute
 Only execute after the confirmation gate is passed.
 
 Execution should be bounded and minimal:
@@ -221,8 +235,11 @@ Execution should be bounded and minimal:
 - prefer summary-first outputs before full prose
 - preserve unresolved points as pending confirmations
 - do not silently resolve conflicts
+- when generating draft test cases, include case title, preconditions, steps, and expected result
+- test case titles should use the functional module as a prefix
+- test steps should be detailed enough for direct manual execution whenever practical
 
-### Phase 6: verify
+### Phase 7: verify
 Before declaring completion, verify:
 - requested outputs were produced
 - blocking questions count is zero
@@ -230,7 +247,7 @@ Before declaring completion, verify:
 - issue taxonomy is respected
 - json outputs pass schema validation when strict mode is requested
 
-### Phase 7: finalize
+### Phase 8: finalize
 Declare execution complete only when:
 - goal is defined
 - plan exists
@@ -250,6 +267,7 @@ This skill is stateful at the workflow level.
 - always state what has been completed, what is still blocked, and what the next action is
 - if the user comes back later, resume from the latest unfinished phase instead of restarting from intent by default
 - only restart from an earlier phase when new input materially changes scope, assumptions, or output requirements
+- if the user raises a new question or correction, move back to the earliest affected phase before continuing
 - `assistant-action` is the preferred entry for a fresh run, and also the preferred command for continuing from the previous workflow state
 
 ## Input handling rules
@@ -360,6 +378,11 @@ Map natural language internally to one of these modes.
 - “确认 / confirm / lock / finalize / proceed with assumptions” -> confirm
 - “执行 / execute / approved generate / proceed now” -> execute
 - “生成 / generate / draft / output” -> if blocked then plan first, else execute
+
+Default workflow rule:
+- `assistant-action` should execute phases in order: `intent -> plan -> check -> ask -> confirm -> execute -> verify -> finalize`
+- do not skip `check`, `ask`, or `confirm` by default
+- only skip a phase when the user explicitly requests that skip
 
 The user does not need to remember commands. Natural language is enough.
 

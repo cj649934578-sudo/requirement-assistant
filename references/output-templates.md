@@ -124,12 +124,21 @@ Use these templates when the user asks for formal outputs or when consistency ma
 
 ```markdown
 ## Draft test cases
-### Case 1: [title]
+### Case 1: [功能模块]-[测试场景标题]
 - Preconditions:
 - Steps:
+  1. [尽量详细描述用户操作、输入值、前置状态和触发动作]
+  2. [继续补充关键步骤，不要只写“执行功能”]
 - Expected result:
 - Priority:
 ```
+
+Rules:
+- The test case title should use the functional module as a prefix.
+- Example title: `登录模块-手机号登录成功`
+- Steps should be as detailed as practical so a tester can execute them directly.
+- Preconditions should clearly state account state, permissions, data setup, and page entry conditions when relevant.
+- Expected result should describe user-visible result, state change, and error feedback when applicable.
 
 
 ## Plan-first note

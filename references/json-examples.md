@@ -195,34 +195,22 @@ Use this file when the user requests strict JSON output, machine-readable output
 ### Example output
 ```json
 {
-  "schema": "prd-bundle",
+  "schema_version": "1.0.0",
+  "artifact_type": "prd_bundle",
   "prd": {
-    "background_and_goal": "Allow users to submit refund requests with evidence.",
-    "user_scope": ["buyer"],
-    "pages_or_flows": [
-      {
-        "name": "Refund Request Page",
-        "description": "Users choose a refund reason, upload evidence images, and submit a request."
-      }
-    ],
-    "core_interactions": [
-      "select refund reason",
-      "upload up to 3 images",
-      "submit refund request"
-    ],
-    "business_rules": [
-      "at least one refund reason is required",
-      "maximum image upload count is 3"
-    ],
-    "exceptions_and_edges": [
-      "upload failure",
-      "submit failure",
-      "oversized image"
-    ],
-    "pending_confirmations": [
-      "allowed image formats",
-      "maximum file size"
-    ]
+    "title": "退款申请功能 PRD",
+    "background": "Allow users to submit refund requests with evidence.",
+    "goals": ["Support structured refund submission with evidence upload."],
+    "users_and_roles": ["buyer"],
+    "scope": {
+      "in_scope": ["refund reason selection", "image upload", "refund request submission"],
+      "out_of_scope": ["refund approval back-office workflow"]
+    },
+    "pages_or_flows": ["Refund Request Page", "Refund Result Page"],
+    "core_interactions": ["select refund reason", "upload up to 3 images", "submit refund request"],
+    "business_rules": ["at least one refund reason is required", "maximum image upload count is 3"],
+    "exceptions_and_edge_cases": ["upload failure", "submit failure", "oversized image"],
+    "pending_confirmations": ["allowed image formats", "maximum file size"]
   },
   "function_list": [
     {
@@ -236,16 +224,31 @@ Use this file when the user requests strict JSON output, machine-readable output
   ],
   "test_points": [
     {
-      "object_under_test": "refund request submission",
+      "object": "refund request submission",
       "normal_path": ["submit with valid reason and images"],
       "abnormal_path": ["submit without reason", "upload unsupported image"],
       "boundary_cases": ["upload exactly 3 images", "upload 4 images"],
-      "permissions_or_roles": ["buyer only"],
-      "states_or_transitions": ["draft to submitted"]
+      "permission_cases": ["buyer only"],
+      "state_or_transition_cases": ["draft to submitted"]
     }
   ],
-  "assumptions": [],
-  "limitations": []
+  "draft_test_cases": [
+    {
+      "case_title": "退款申请模块-提交成功",
+      "preconditions": [
+        "用户已登录买家账号",
+        "当前订单支持发起退款申请",
+        "退款申请页面已成功打开"
+      ],
+      "steps": [
+        "在退款原因下拉框中选择任意有效退款原因",
+        "上传 1 张格式正确且大小符合限制的凭证图片",
+        "点击提交退款申请按钮"
+      ],
+      "expected_result": "退款申请提交成功，页面展示提交成功反馈，并进入退款结果页或成功状态。",
+      "priority": "P1"
+    }
+  ]
 }
 ```
 
