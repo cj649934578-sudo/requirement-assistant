@@ -1,6 +1,6 @@
 ---
 name: requirement-assistant
-version: 0.2.0
+version: 0.2.1
 description: "analyze product requirement materials and turn them into structured requirement artifacts for gpt or codex. use when the user provides prototype images, page screenshots, page notes, flow descriptions, prd fragments, meeting notes, or mixed requirement materials and wants a staged requirement workflow: first understand intent, then produce an execution plan, ask blocking questions, confirm scope and assumptions, and only then execute generation of prd drafts, function lists, test points, issue reports, or structured json outputs. also use for requirement checking, analysis, clarification, confirmation, and plan-first execution."
 ---
 
