@@ -1,5 +1,7 @@
 # requirement-assistant
 
+[中文](README.md) | [English](README_EN.md)
+
 [![npm version](https://img.shields.io/npm/v/@chaidd/requirement-assistant-skill)](https://www.npmjs.com/package/@chaidd/requirement-assistant-skill)
 ![schema-driven](https://img.shields.io/badge/schema-driven-0f766e)
 ![plan-first workflow](https://img.shields.io/badge/workflow-plan--first-2563eb)
