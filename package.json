@@ -2,7 +2,7 @@
   "name": "@chaidd/requirement-assistant-skill",
   "version": "0.2.2",
   "description": "NPM installer for the requirement-assistant Codex skill",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "private": false,
   "bin": {
     "requirement-assistant-skill": "./bin/install.js"
