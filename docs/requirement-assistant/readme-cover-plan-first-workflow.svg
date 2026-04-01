@@ -1,0 +1,116 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">requirement-assistant README cover</title>
+  <desc id="desc">A plan-first workflow infographic showing messy inputs transformed into reliable requirement outputs.</desc>
+  <defs>
+    <linearGradient id="bg" x1="120" y1="80" x2="1480" y2="820" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="1" stop-color="#EEF7F5"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="589" y1="218" x2="1011" y2="682" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#0F766E"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1600" height="900" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0F172A" flood-opacity="0.08"/>
+    </filter>
+    <style>
+      .title { font: 700 52px 'Segoe UI', Arial, sans-serif; fill: #0F172A; }
+      .subtitle { font: 400 24px 'Segoe UI', Arial, sans-serif; fill: #334155; }
+      .section { font: 700 24px 'Segoe UI', Arial, sans-serif; fill: #0F172A; letter-spacing: 0.04em; }
+      .body { font: 400 20px 'Segoe UI', Arial, sans-serif; fill: #475569; }
+      .small { font: 600 18px 'Segoe UI', Arial, sans-serif; fill: #64748B; letter-spacing: 0.06em; }
+      .cardTitle { font: 700 30px 'Segoe UI', Arial, sans-serif; fill: white; }
+      .cardBody { font: 400 18px 'Segoe UI', Arial, sans-serif; fill: rgba(255,255,255,0.92); }
+      .nodeText { font: 700 18px 'Segoe UI', Arial, sans-serif; fill: #0F172A; }
+      .nodeSub { font: 400 14px 'Segoe UI', Arial, sans-serif; fill: #64748B; }
+      .pill { font: 700 16px 'Segoe UI', Arial, sans-serif; fill: white; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" rx="36" fill="url(#bg)"/>
+  <circle cx="1330" cy="160" r="170" fill="#DBEAFE" fill-opacity="0.7"/>
+  <circle cx="148" cy="780" r="180" fill="#CCFBF1" fill-opacity="0.55"/>
+  <circle cx="1220" cy="760" r="110" fill="#E0F2FE" fill-opacity="0.75"/>
+
+  <text x="120" y="118" class="title">Turn messy requirement inputs into reliable outputs</text>
+  <text x="120" y="160" class="subtitle">A plan-first workflow for screenshots, PRD fragments, notes, and requirement reviews</text>
+
+  <rect x="120" y="218" width="300" height="468" rx="28" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+  <text x="156" y="272" class="small">INPUTS</text>
+  <text x="156" y="324" class="section">Messy materials</text>
+
+  <rect x="156" y="358" width="228" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="188" y="396" class="body">Screenshots</text>
+  <rect x="156" y="438" width="228" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="188" y="476" class="body">Prototype notes</text>
+  <rect x="156" y="518" width="228" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="188" y="556" class="body">Meeting minutes</text>
+  <rect x="156" y="598" width="228" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="188" y="636" class="body">PRD fragments</text>
+
+  <path d="M450 452H542" stroke="#94A3B8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M525 428L565 452L525 476" stroke="#94A3B8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="566" y="218" width="468" height="468" rx="36" fill="url(#accent)" filter="url(#shadow)"/>
+  <text x="606" y="274" class="small" fill="white">CORE WORKFLOW</text>
+  <text x="606" y="332" class="cardTitle">Plan-first workflow</text>
+  <text x="606" y="366" class="cardBody">Do not jump straight to a PRD. Clarify, inspect, confirm, then generate.</text>
+
+  <rect x="606" y="406" width="96" height="72" rx="20" fill="white"/>
+  <text x="629" y="448" class="nodeText">Intent</text>
+  <text x="619" y="468" class="nodeSub">what to produce</text>
+
+  <rect x="726" y="406" width="96" height="72" rx="20" fill="#DBEAFE"/>
+  <text x="756" y="448" class="nodeText">Plan</text>
+  <text x="746" y="468" class="nodeSub">next actions</text>
+
+  <rect x="846" y="406" width="96" height="72" rx="20" fill="#CCFBF1"/>
+  <text x="875" y="448" class="nodeText">Check</text>
+  <text x="863" y="468" class="nodeSub">find gaps</text>
+
+  <rect x="606" y="512" width="96" height="72" rx="20" fill="white"/>
+  <text x="641" y="554" class="nodeText">Ask</text>
+  <text x="620" y="574" class="nodeSub">resolve blockers</text>
+
+  <rect x="726" y="512" width="96" height="72" rx="20" fill="#E0E7FF"/>
+  <text x="739" y="554" class="nodeText">Confirm</text>
+  <text x="740" y="574" class="nodeSub">lock scope</text>
+
+  <rect x="846" y="512" width="96" height="72" rx="20" fill="white"/>
+  <text x="863" y="554" class="nodeText">Execute</text>
+  <text x="858" y="574" class="nodeSub">generate outputs</text>
+
+  <rect x="726" y="618" width="96" height="72" rx="20" fill="#DCFCE7"/>
+  <text x="751" y="660" class="nodeText">Verify</text>
+  <text x="741" y="680" class="nodeSub">validate results</text>
+
+  <path d="M702 442H726" stroke="white" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M822 442H846" stroke="white" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M654 478V512" stroke="white" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M774 478V512" stroke="white" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M894 478V512" stroke="white" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+  <path d="M774 584V618" stroke="white" stroke-opacity="0.8" stroke-width="4" stroke-linecap="round"/>
+
+  <rect x="640" y="726" width="140" height="40" rx="20" fill="#1D4ED8"/>
+  <text x="667" y="751" class="pill">plan before output</text>
+  <rect x="794" y="726" width="124" height="40" rx="20" fill="#0F766E"/>
+  <text x="819" y="751" class="pill">verify before trust</text>
+
+  <path d="M1066 452H1158" stroke="#94A3B8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M1141 428L1181 452L1141 476" stroke="#94A3B8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <rect x="1180" y="218" width="300" height="468" rx="28" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)"/>
+  <text x="1216" y="272" class="small">OUTPUTS</text>
+  <text x="1216" y="324" class="section">Reliable artifacts</text>
+
+  <rect x="1216" y="358" width="228" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1248" y="396" class="body">Issue report</text>
+  <rect x="1216" y="438" width="228" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1248" y="476" class="body">PRD bundle</text>
+  <rect x="1216" y="518" width="228" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1248" y="556" class="body">Test points</text>
+  <rect x="1216" y="598" width="228" height="62" rx="18" fill="#F8FAFC" stroke="#E2E8F0"/>
+  <text x="1248" y="636" class="body">Validated JSON</text>
+
+  <text x="120" y="796" class="subtitle">Built for requirement review, product handoff, implementation prep, and downstream automation.</text>
+</svg>

@@ -1,107 +1,262 @@
 # requirement-assistant
 
-一个“需求分析助手”skill 资源包：把截图/原型/会议纪要/PRD 片段等混合需求材料，按 **plan-first**（先意图→再计划→整理待确认项→确认→执行→校验）流程整理成结构化需求产物，并提供 **严格 JSON Schema + 本地校验脚本**，方便给 GPT/Codex 或下游自动化管道使用。
+[![npm version](https://img.shields.io/npm/v/@chaidd/requirement-assistant-skill)](https://www.npmjs.com/package/@chaidd/requirement-assistant-skill)
+![schema-driven](https://img.shields.io/badge/schema-driven-0f766e)
+![plan-first workflow](https://img.shields.io/badge/workflow-plan--first-2563eb)
+![eval-ready](https://img.shields.io/badge/evals-ready-7c3aed)
+![windows powershell](https://img.shields.io/badge/platform-Windows%20PowerShell-1d4ed8)
 
-> 这不是一个可直接运行的产品（没有内置模型调用、没有 Web UI/服务端）；它提供的是 **流程规范、模板、schema 和校验工具**。
+![requirement-assistant cover](docs/requirement-assistant/readme-cover-plan-first-workflow.svg)
+
+把截图、原型、会议纪要、PRD 片段这些混乱的需求材料，整理成可执行、可校验、可复用的结构化需求产物。
+
+这不是一个“直接帮你生成一篇 PRD”的普通 prompt 集合，而是一套更适合团队落地的 **plan-first 需求工程流程**：
+
+- 先理解目标和范围
+- 先产出执行计划
+- 先检查缺失、歧义、冲突和覆盖缺口
+- 再整理待确认项并设置确认闸门
+- 最后才生成 PRD、功能清单、测试点或严格 JSON
+
+它既适合在 GPT / Codex 里作为 skill 使用，也适合被下游自动化流程消费，因为仓库同时提供了：
+
+- 明确的需求分析流程
+- 三类严格 JSON Schema
+- 最小合法样例
+- 本地 bootstrap / validate 工具
+- eval 基线
+
+> 如果你也不想再让 AI 直接从几张截图“脑补出一篇看起来很完整、但细节并不可靠的 PRD”，这个项目就是为你准备的。
 
 安装说明见 [INSTALL.md](INSTALL.md)。
 
 ---
 
-## 功能介绍（What it does）
+## 输入材料 -> 输出结果
 
-### 1) Plan-first 需求工作流（skill）
+下面是一个更接近真实使用场景的示例。
 
-入口：`SKILL.md`
+### 输入材料
 
-核心原则：
-- **先澄清意图与范围**：目标产物是什么（PRD / issue-report / 功能清单 / 测试点 / 严格 JSON）
-- **先出执行计划**：列输入清单、识别结果、步骤、待确认项、推荐动作
-- **分层整理待确认项**：优先区分“必须确认项”“建议优化项”“可后续确认项”，避免把所有问题都当成同级阻塞
-- **确认闸门**：用户确认后才生成长文/结构化产物
-- **可校验**：需要机器可读时输出严格 JSON，并本地校验
+假设你手上只有这些零散信息：
 
-### 2) 三类严格输出 Schema（machine-readable）
+- 2 张“会员中心”页面截图
+- 一段会议纪要：`会员等级到期前 7 天提醒；过期后权益失效，但历史订单不受影响`
+- 一段产品说明：`会员页需要展示当前等级、到期时间、续费入口、权益说明`
+- 一句口头补充：`续费入口暂不支持企业会员`
 
-位置：`schemas/`
+这些信息看起来已经不少了，但如果直接让 AI 写 PRD，通常会出现几个问题：
 
-- `issue-report`：适合“扫描/检查/风险识别”，输出缺失/冲突/歧义/覆盖缺口
-- `prd-bundle`：适合“生成型交付物”，输出 PRD 草稿 + 功能点 + 测试点 + 用例草稿
-- `requirement-package`：适合“全量分析包”，包含识别摘要、结构化模型、问题清单、待确认项、以及可选产物
+- 默认脑补了未确认的业务规则
+- 没有把“个人会员”和“企业会员”差异单独拎出来
+- 忽略到期前、到期后、续费失败等关键状态
+- 没有指出哪些地方仍然需要确认
 
-最小合法样例：`examples/*.min.json`
+### 输出结果
 
-### 3) 本地工具：bootstrap & validate
+`requirement-assistant` 更推荐先产出一个 `issue-report` 或执行计划，结果会更像这样：
 
-位置：`scripts/`
-- `scripts/bootstrap_output.py`：生成各 schema 的“空骨架”JSON
-- `scripts/validate_output.py`：对 JSON 做本地校验（实现的是 JSON Schema 的子集校验器）
+```yaml
+意图摘要:
+  目标产物: issue-report
+  分析范围: 会员中心会员模块
+  当前目标: 在生成 PRD 前先识别需求缺口
 
-### 4) Windows 最小命令入口（CLI wrapper）
+已识别内容:
+  - 展示当前会员等级
+  - 展示到期时间
+  - 提供续费入口
+  - 展示会员权益说明
+  - 到期前 7 天提醒
+  - 到期后权益失效
+  - 历史订单不受影响
+  - 企业会员暂不支持续费入口
 
-入口：`ra.ps1`
+发现的问题:
+  缺失项:
+    - 未说明提醒通过什么渠道触达
+    - 未说明续费失败时的处理方式
+    - 未完整定义会员过期后的页面状态
+  歧义项:
+    - 企业会员是完全不展示续费入口，还是展示置灰按钮并说明原因
+    - 会员过期后，是否仍可在当前页面直接续费
+  覆盖缺口:
+    - 未说明提醒频次规则
+    - 未说明过期后会员权益说明的展示方式
 
-它是对现有 `scripts/*.py` 的薄封装，提供统一命令与退出码，便于本地/CI 使用。
+必须确认:
+  - 企业会员应该隐藏续费按钮，还是展示不可点击按钮并附带说明？
+  - 会员过期后，页面应优先展示续费引导，还是优先展示权益失效提示？
+
+建议下一步:
+  - 先确认以上 2 个阻塞问题
+  - 再生成 prd-bundle 和测试点
+```
+
+### 这段输出真正有价值的地方
+
+它不是急着“写一篇看起来完整的 PRD”，而是先把这些事情做对：
+
+- 把已识别事实和待确认问题分开
+- 把真正影响实现和测试的问题提前暴露出来
+- 把后续该继续问什么、该生成什么交付物说明白
+
+对团队来说，这种输出通常比一篇直接生成的长文档更可靠，也更容易继续往下推进。
 
 ---
 
-## 当前支持的情况（Supported）
+## 为什么这个项目值得关注
 
-### 支持的输入材料类型（作为 skill 使用时）
+大多数“AI 需求整理”方案有三个共性问题：
 
-- 原型/页面截图、交互截图
-- 页面说明、字段说明、流程描述
-- PRD 片段、会议纪要、需求碎片化文本
-- 中英混合材料（默认以中文输出更自然）
+- 一上来就直接生成长文档，跳过澄清和确认
+- 输出看起来完整，但很难判断哪里是事实、哪里是猜测
+- 很难进入团队流程，无法做结构化校验，也无法给自动化系统稳定消费
 
-> 注意：仓库本身不包含“截图解析器”或“模型调用器”，通常由对话式助手（GPT/Codex）来读图/读文并按 schema 输出。
+`requirement-assistant` 的设计目标正好相反：
 
-### 支持的输出产物类型
+### 1) 先计划，再生成
 
-- `issue-report`（结构化问题扫描：missing/conflict/ambiguous/coverage-gap）
-- `prd-bundle`（结构化 PRD 草稿 + 功能点 + 测试点 + 用例草稿）
-- `requirement-package`（全量分析包）
+它默认不是“直接写 PRD”，而是先做 `intent -> plan -> check -> ask -> confirm -> execute -> verify`。
 
-### 校验支持
+这会显著降低两类常见风险：
 
-- 支持对上述三类 JSON 输出做本地校验（见“Quick Start”）
+- 需求材料不完整时，AI 直接补脑
+- 需求边界没锁定时，产物越写越偏
+
+### 2) 不只生成，还会先找问题
+
+在真正生成交付物之前，它会优先识别：
+
+- 缺失项
+- 冲突项
+- 歧义项
+- 覆盖缺口
+
+这让它更像一个“需求分析助手”，而不是“文档续写器”。
+
+### 3) 适合团队和流程，而不只是单次对话
+
+仓库内置了严格输出 Schema、最小样例、校验脚本和 eval 基线，方便你把结果：
+
+- 交给 GPT / Codex 继续处理
+- 接到自动化 pipeline
+- 用于需求评审、测试设计、实现前检查
+
+### 4) 能处理真实世界里的混合材料
+
+现实里的需求输入通常不是一份完整 PRD，而是这些混合体：
+
+- 页面截图 / 原型图
+- 页面说明 / 字段说明
+- 会议纪要 / 讨论记录
+- PRD 片段 / 零散规则
+- 中英文混合文本
+
+这个项目的目标，就是把这些“碎的、乱的、半成品的输入”，整理成团队能继续推进的结构化结果。
 
 ---
 
-## 限制与已知风险（Limitations）
+## 适合什么场景
 
-- `scripts/validate_output.py` 是 **JSON Schema 子集**校验器：它覆盖常用的 `type/enum/required/items/$ref` 等，但不等同于完整 Draft 2020-12 实现。
-- 本仓库不内置：
-  - OpenAI API 调用
-  - 线上服务部署
-  - UI（Web/桌面）
-  - 需求知识库/持久化存储
+你可能会在这些场景里真正感受到它的价值：
+
+- 产品经理拿着一批截图和零散说明，想先查缺失和歧义
+- 开发在动手前，想把业务规则、状态流转和边界条件拆清楚
+- 测试想快速补出测试点、异常路径和覆盖缺口
+- 团队希望把需求分析结果沉淀成结构化资产，而不是散落在聊天记录里
+- 你想把“需求理解”这一步纳入自动化链路，而不是只靠人工反复同步
 
 ---
 
-## Quick Start（Windows）
+## 它到底能产出什么
+
+### 1) `issue-report`
+
+适合在需求还没完全清楚时先做问题扫描。
+
+你会得到：
+
+- 缺失信息
+- 冲突点
+- 歧义点
+- 覆盖缺口
+- 待确认项
+
+适合用途：
+
+- 需求评审前预检
+- PRD 质量扫描
+- 截图 / 原型补全分析
+
+### 2) `prd-bundle`
+
+适合在范围基本确认后，生成更偏交付物的结果。
+
+你会得到：
+
+- PRD 草稿
+- 功能点清单
+- 测试点
+- 用例草稿
+
+适合用途：
+
+- 从需求材料快速整理成执行文档
+- 给产品、开发、测试做对齐底稿
+
+### 3) `requirement-package`
+
+适合要做全量沉淀或对接自动化系统时使用。
+
+你会得到：
+
+- 识别摘要
+- 结构化模型
+- 问题清单
+- 待确认项
+- 可选生成产物
+
+适合用途：
+
+- 进入下游 AI / 自动化流程
+- 做需求资产归档
+
+---
+
+## 仓库结构
+
+```text
+SKILL.md                 # skill 主入口与行为规则
+schemas/                 # 严格 JSON Schema
+examples/                # 最小合法样例
+references/              # 模板、检查清单、输出参考
+scripts/                 # bootstrap / validate / eval 工具
+evals/                   # eval 基线
+ra.ps1                   # Windows PowerShell 统一入口
+```
+
+---
+
+## 快速开始
 
 ### 环境要求
 
 - PowerShell
 - Python 3（命令为 `python`）
 
-## 安装为 Codex Skill
-
 ### 方式 1：直接从仓库使用
 
-在当前仓库根目录直接运行：
+如果你已经 clone 了这个仓库，在根目录运行：
 
 ```powershell
 .\ra.ps1 check-examples
 .\ra.ps1 run-evals
 ```
 
-然后把材料交给助手，默认先产出 `issue-report`。
+如果输出正常，说明最小样例和 eval 基线都通过了。
 
 ### 方式 2：通过 npm / npx 安装
-
-发布到 npm 后，可直接安装到 Codex skills 目录：
 
 ```powershell
 npx @chaidd/requirement-assistant-skill@latest install
@@ -125,53 +280,47 @@ npx @chaidd/requirement-assistant-skill@latest install --target project
 npx @chaidd/requirement-assistant-skill@latest install --dir C:\Users\you\.codex\skills
 ```
 
-安装后建议验证：
+安装说明详见 [INSTALL.md](INSTALL.md)。
 
-```powershell
-.\ra.ps1 check-examples
-.\ra.ps1 run-evals
-```
+---
 
-如果已经安装过旧版本，重新执行同一条 `install` 命令即可覆盖更新到最新版，例如：
+## 最常用的几条命令
 
-```powershell
-npx @chaidd/requirement-assistant-skill@latest install
-```
-
-### 1) 校验仓库自带最小样例
+### 校验仓库自带最小样例
 
 ```powershell
 .\ra.ps1 check-examples
 ```
 
 期望输出：
+
 - `VALID` x3
 
-### 2) 生成一个空骨架 JSON（bootstrap）
+### 生成一个空骨架 JSON
 
 ```powershell
 .\ra.ps1 bootstrap issue-report out.issue-report.json
 ```
 
-### 3) 校验一个 JSON（validate）
+### 校验一个 JSON 输出
 
 ```powershell
 .\ra.ps1 validate issue-report out.issue-report.json
 ```
 
-### 4) 运行最小 eval 基线
+### 运行 eval 基线
 
 ```powershell
 .\ra.ps1 run-evals
 ```
 
-只跑单个基线样例：
+只跑单个样例：
 
 ```powershell
 .\ra.ps1 run-evals issue-report-gdyd-202603
 ```
 
-运行失败型基线（用于验证 eval runner 能抓到格式或语义退化）：
+运行失败型基线：
 
 ```powershell
 python scripts/run_evals.py --manifest evals/negative.json
@@ -179,261 +328,106 @@ python scripts/run_evals.py --manifest evals/negative.json
 
 ---
 
-## Schema 选择指南（Schema guide）
+## Schema 选择指南
 
-你想做什么 → 选哪个 schema：
+你想做什么，可以直接这样选：
 
-- “我想先找问题/补全需求/扫描风险” → `issue-report`
-- “我想生成 PRD/功能点/测试点/用例草稿” → `prd-bundle`
-- “我想把识别、结构化模型、问题、待确认项、产物都打包” → `requirement-package`
+- “我想先找问题、补全需求、扫描风险” -> `issue-report`
+- “我想生成 PRD、功能点、测试点、用例草稿” -> `prd-bundle`
+- “我想把识别、问题、确认项、产物全部打包” -> `requirement-package`
 
 ---
 
-## 作为 Skill 的正确使用方式
+## 作为 Skill 怎么用
 
-`requirement-assistant` 是一个 **plan-first** 的需求工作流 skill。助手内部应严格按阶段顺序推进，但不要求用户手动逐条输入每个阶段命令。
+这是一个 **plan-first** 的需求工作流 skill。正常情况下，你不需要手动逐阶段输入命令，而是直接用自然语言描述目标，由助手内部按阶段顺序推进。
 
-正确理解方式：
-
-- 助手内部应遵守顺序化流程：`intent -> plan -> check -> ask -> confirm -> execute -> verify -> finalize`
-- 正常使用时，你可以直接用自然语言描述目标，由助手驱动内部流程，而不是要求用户手动逐条输入命令
-- 如果你希望使用一个统一入口提示词，推荐使用 `assistant-action`
-- 默认情况下，助手应按顺序执行，不应主动跳过 `check`、`ask` 或 `confirm`
-- 只有用户明确要求跳过某一步时，助手才可以跳过对应阶段
-- 每次暂停时，助手都应明确告知当前执行到了哪一步、已完成什么、还缺什么、下一步建议是什么
-- 后续继续时，助手应默认从上一次未完成的阶段继续，而不是重新从头分析
-- 如果用户提出新的问题、纠正、补充约束或新材料，助手应回退到受影响的最早阶段，再继续往后执行
-
-### 推荐用法
-
-大多数情况下，不需要手动输入：
-
-- `assistant-action`
-- `assistant-plan`
-- `assistant-check`
-- `assistant-analyze`
-- `assistant-ask`
-- `assistant-confirm`
-- `assistant-execute`
-
-你更推荐直接这样使用：
+推荐使用方式：
 
 - `assistant-action，先生成计划并告诉我当前判断，等我确认后再继续`
-- `assistant-action，请帮我分析梳理功能点，并编写测试用例；先告知我当前判断、缺失信息和建议，待我确认后再继续输出`
-- `assistant-action，继续上一次未完成的需求分析，从当前阶段往后执行，并先告诉我现在卡在哪一步`
 - `帮我根据这批截图先分析需求，并给执行计划`
 - `先检查这份 PRD 有没有歧义、冲突和遗漏`
 - `帮我拆这个页面的功能点、状态和流程`
 - `这些范围已经确认了，直接输出功能清单和测试点`
 - `如果有必须确认项先问我，不要直接生成 PRD`
 
-上面这些自然语言请求，会由助手驱动内部阶段顺序执行；如果中途有必须确认项或等待确认，会暂停并汇报当前阶段状态。
+默认内部流程：
 
-### `assistant-action` 是什么
+`intent -> plan -> check -> ask -> confirm -> execute -> verify -> finalize`
 
-`assistant-action` 是推荐的统一入口提示词，适合你希望助手先整理计划步骤文档，再由你确认是否继续的场景。
+推荐统一入口：
 
-它的默认行为是：
+- `assistant-action`
 
-- 先输出 `intent summary`
-- 再输出 `execution plan`
-- 明确当前判断、输入清单、识别结果、计划步骤、待确认项分层、建议动作
-- 用 `run-status` 风格总结当前状态
-- 明确当前执行阶段，以及后续如何从该阶段继续
-- 明确告知用户下一步需要确认什么
+它会优先输出：
 
-它**不会**默认直接生成 PRD、功能清单、测试点或 JSON 成果，除非你在后续确认继续执行。
+- intent summary
+- execution plan
+- 当前判断
+- 输入清单
+- 识别结果
+- 分层待确认项
+- 下一步建议
 
-### 各阶段的定位
-
-- `assistant-action`：统一入口；先生成计划并告知当前情况，等待用户确认
-- `assistant-plan`：先理解目标，给执行计划，先不生成正文
-- `assistant-check`：查缺失、冲突、歧义、覆盖漏洞
-- `assistant-analyze`：拆页面、流程、规则、状态
-- `assistant-ask`：把不清楚的地方整理成分层待确认项
-- `assistant-confirm`：锁定范围、假设、输出物
-- `assistant-execute`：在确认后生成交付物
-
-### 测试用例输出规范
-
-如果输出包含测试用例，推荐至少包含以下字段：
-
-- 测试用例标题
-- 前置条件
-- 测试用例步骤
-- 测试用例期望结果
-
-约束建议：
-
-- 测试用例标题应以功能模块作为前缀，例如：`登录模块-手机号登录成功`
-- 测试用例步骤应尽量详细，能够直接指导测试执行，而不是只写笼统动作
-- 前置条件应尽量说明账号状态、权限、测试数据和页面进入条件
-- 期望结果应尽量覆盖页面反馈、状态变化、校验结果和错误提示
-
-这些阶段的关系应理解为：
-
-- 它们构成一个内部顺序工作流
-- 不要求用户必须手动依次调用每个阶段命令
-- 助手需要明确当前处于哪一阶段，并在暂停后支持继续执行
-- 默认路径应按顺序执行，除非用户明确提出跳过某一步
-- 其中 `assistant-action` 更适合作为默认起点
-
-### 常见使用场景
-
-#### 场景 1：只有截图或原型
-
-用户输入：
-
-```text
-assistant-action，帮我根据这些截图整理需求
-```
-
-推荐行为：
-
-- 先输出 `intent summary` 和 `execution plan`
-- 必要时列出分层待确认项
-- 等用户确认后再进入后续阶段
-
-#### 场景 2：已有较完整 PRD，想做质量检查
-
-用户输入：
-
-```text
-帮我检查这份 PRD 有没有歧义、遗漏和覆盖漏洞
-```
-
-推荐行为：
-
-- 可直接进入 `assistant-check`
-
-#### 场景 3：只想拆解页面或流程
-
-用户输入：
-
-```text
-帮我拆这个页面的功能点、状态和交互流程
-```
-
-推荐行为：
-
-- 可直接进入 `assistant-analyze`
-
-#### 场景 4：范围已经确认，只要产出物
-
-用户输入：
-
-```text
-范围已确认，直接输出功能清单和测试点；如果有必要假设请明确列出
-```
-
-推荐行为：
-
-- 先快速确认假设是否可接受
-- 条件满足后进入 `assistant-execute`
-
-### 一句话原则
-
-**助手内部应按 `intent -> plan -> check -> ask -> confirm -> execute -> verify -> finalize` 顺序执行，并持续汇报当前阶段状态；只有用户明确要求时才可跳过某一步。**
+更完整的 skill 行为规则见 [SKILL.md](SKILL.md)。
 
 ---
 
-## 过程文档与落盘规则
+## 当前支持
 
-为了支持“知道当前执行到哪一步”以及“后续从上一次阶段继续执行”，推荐把过程文档落盘保存。
+### 输入材料
 
-### 三类过程文档分别做什么
+- 页面截图 / 原型图 / 交互截图
+- 页面说明 / 字段说明 / 流程描述
+- PRD 片段 / 会议纪要 / 零散需求文本
+- 图文混合材料
+- 中英混合输入
 
-- `intent-summary.md`：记录用户目标、范围判断、输入清单、已知事实和未明确点，用来确认“要做什么”
-- `execution-plan.md`：记录当前判断、识别结果、计划步骤、待确认项分层、建议动作和下一步，用来确认“准备怎么做”
-- `run-status.md`：记录当前阶段、完成情况、阻塞状态、验证状态和下一步，用来确认“现在做到哪了”
+### 输出产物
 
-### 推荐目录结构
+- `issue-report`
+- `prd-bundle`
+- `requirement-package`
 
-```text
-docs/requirement-assistant/
-  intent/
-  plan/
-  status/
-```
+### 校验能力
 
-### 推荐命名规则
-
-- `docs/requirement-assistant/intent/YYYY-MM-DD-<topic>-intent-summary.md`
-- `docs/requirement-assistant/plan/YYYY-MM-DD-<topic>-execution-plan.md`
-- `docs/requirement-assistant/status/YYYY-MM-DD-<topic>-run-status.md`
-
-说明：
-
-- `YYYY-MM-DD` 用于标记本次运行日期
-- `<topic>` 使用稳定、可读的主题标识，例如 `login-flow`、`refund-process`、`member-center`
-- 同一轮 workflow 尽量复用相同的 `<topic>`
-- `run-status.md` 更适合在同一轮任务中持续更新，而不是每暂停一次就新建一份
-
-### 为什么这样更合理
-
-- 按文档类型分目录，便于查找和归档
-- 文件名带日期和主题，便于追踪历史记录
-- 可以清楚区分“目标定义”“执行计划”“当前状态”
-- 当任务中断后，可以根据 `run-status.md` 直接从上一次阶段继续
+- 对上述三类 JSON 输出做本地校验
 
 ---
 
-## 目录结构（Repository layout）
+## 限制与边界
 
-- `SKILL.md`：skill 定义（plan-first 工作流）
-- `references/`：模板与清单（plan、输出模板、checklist 等）
-- `schemas/`：严格 JSON Schema
-- `examples/`：最小合法 JSON 样例
-- `scripts/`：bootstrap/validate 脚本
-- `evals/`：最小 eval 基线（固定样例 + 期望检查）
-- `bin/install.js`：npm / npx 安装器入口
-- `package.json`：npm 分发元数据
-- `ra.ps1`：Windows 最小 CLI wrapper
-- `.planning/`：GSD 项目化文件与代码库地图（可选，用于项目推进/体检）
+这个仓库很强调“需求分析流程 + 结构化输出”，但它不是一个完整产品。
+
+当前不内置：
+
+- OpenAI API 调用
+- Web UI / 服务端
+- 截图解析器
+- 需求知识库或持久化存储
+
+另外：
+
+- `scripts/validate_output.py` 实现的是 **JSON Schema 子集校验器**
+- 它覆盖常用的 `type / enum / required / items / $ref` 等能力
+- 但它不是完整的 Draft 2020-12 实现
 
 ---
 
-## FAQ
+## 适合谁
 
-说明：以下 `assistant-action`、`assistant-check`、`assistant-analyze` 等是与助手对话时使用的工作模式提示词，不是 `ra.ps1` 的本地 CLI 子命令。
+如果你属于下面任意一种角色，这个项目大概率会对你有价值：
 
-### Q: 测试人员如何使用这个 skill 辅助工作？
-推荐从 `assistant-action` 或 `assistant-check` 开始。
+- 想把“AI 需求分析”做得更稳、更可复用的产品经理
+- 想在实现前把规则、边界和状态流整理清楚的开发者
+- 想让测试点和异常路径更早暴露的测试工程师
+- 想把需求分析沉淀成结构化资产的团队负责人
+- 想把需求理解结果接到自动化系统里的 AI 工程师
 
-- 如果材料还比较散，先用 `assistant-action`，让助手先整理目标、范围、待确认项和建议
-- 如果需求文档已经比较完整，直接用 `assistant-check` 检查缺失、冲突、歧义和覆盖漏洞
-- 如果你要产出测试点或测试用例，可以在确认范围后再让助手进入 `assistant-execute`
+如果这个方向和你正在做的事情一致，欢迎点个 Star。
 
-示例：
+---
 
-```text
-assistant-action，请帮我分析这批需求材料，先告诉我当前判断、风险点和缺失信息，确认后再输出测试点和测试用例
-```
+## License
 
-### Q: 开发人员如何使用这个 skill 辅助工作？
-开发更适合用它做“需求拆解”和“实现前澄清”。
-
-- 如果需求范围还没理清，也可以先用 `assistant-action` 作为统一入口，让助手先输出计划、风险判断和待确认项
-- 用 `assistant-analyze` 拆页面、流程、规则、状态和边界条件
-- 用 `assistant-check` 提前发现需求冲突、遗漏和不明确的地方
-- 用 `assistant-confirm` 在实现前锁定范围、假设和输出物，减少返工
-
-示例：
-
-```text
-assistant-action，请帮我拆解这个需求的功能点、业务规则、状态流转和依赖关系，先给我计划和风险判断
-```
-
-### Q: 产品人员如何使用这个 skill 辅助工作？
-产品更适合把它当成“需求梳理和确认助手”。
-
-- 用 `assistant-action` 先让助手整理目标、范围、输入材料和建议动作
-- 用 `assistant-ask` 把模糊点转成明确的分层待确认项，并优先突出必须确认项
-- 用 `assistant-confirm` 锁定范围、假设和交付物
-- 在确认后，再让助手输出 PRD 草稿、功能清单、测试点等结果
-
-示例：
-
-```text
-assistant-action，请根据这些截图、流程说明和会议纪要整理需求，先给出执行计划、待确认项和建议，不要直接生成 PRD
-```
+见 [LICENSE](LICENSE)。
